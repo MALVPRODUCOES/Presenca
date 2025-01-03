@@ -15,6 +15,13 @@ app.use(cors({
 // Servir arquivos estáticos da pasta "public"
 app.use(express.static('public'));
 
+const PORT = process.env.PORT || 3000;
+
+// Rota base
+app.get('/', (req, res) => {
+    res.send('Bem-vindo ao backend do RSVP!');
+});
+
 const filePath = 'rsvp_data.xlsx';
 
 app.post('/save', (req, res) => {
