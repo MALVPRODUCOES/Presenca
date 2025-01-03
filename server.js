@@ -52,4 +52,4 @@ app.post('/save', (req, res) => {
     res.send('Presença confirmada com sucesso!');
 });
 
-app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
