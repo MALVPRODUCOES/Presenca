@@ -117,13 +117,13 @@
             message: document.getElementById('message').value,
         };
 
-        await fetch('https://presenca-ar79.onrender.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
+        await fetch('https://presenca-ar79.onrender.com/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
         .then(response => response.text())
         .then(message => {
             alert(message);
