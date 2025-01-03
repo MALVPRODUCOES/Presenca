@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniversário do Apollo</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3e8d9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://img.elo7.com.br/product/zoom/46F85CB/painel-pequeno-principe-g-frete-gratis-fundo-festa-infantil.jpg'); /* Caminho correto */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center; /* Alinha a imagem ao centro */
+        }
+        header {
+            background-color: #4a90e2;
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 2rem;
+            font-family: 'Comic Sans MS', cursive;
+            text-shadow: 2px 2px 4px #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: relative;
+        }
+        h2 {
+            color: #4a90e2;
+            text-align: center;
+            text-shadow: 1px 1px 2px #bbb;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, textarea, button {
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #FFF;
+        }
+        footer::before {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, #4a90e2, transparent);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Aguardo você ansiosamente! Confirme aqui sua presença.
+    </header>
+    <div class="container">
+        <h2>Confirmação de Presença</h2>
+        <p>Por favor, preencha os campos abaixo para confirmar sua presença:</p>
+        <form id="rsvp-form">
+            <label for="name">Seu Nome:</label>
+            <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
+
+            <label for="guests">Quantidade de Pessoas:</label>
+            <input type="number" id="guests" name="guests" placeholder="Número de acompanhantes" required>
+
+            <label for="message">Mensagem (opcional):</label>
+            <textarea id="message" name="message" rows="4" placeholder="Deixe uma mensagem..."></textarea>
+
+            <button type="submit">Confirmar Presença</button>
+        </form>
+    </div>
+    <footer>
+        Venha comemorar meu primeiro aninho! ⭐
+    </footer>
+
+    <script>
+    document.getElementById('rsvp-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('name').value,
+            guests: document.getElementById('guests').value,
+            message: document.getElementById('message').value,
+        };
+
+        await fetch('http://localhost:3000/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.text())
+        .then(message => {
+            alert(message);
+            document.getElementById('rsvp-form').reset();
+        })
+        .catch(err => alert('Erro ao enviar dados: ' + err));
+    });
+    </script>
+</body>
+</html>
