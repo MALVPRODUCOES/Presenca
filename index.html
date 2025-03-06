@@ -91,15 +91,15 @@
     <div class="container">
         <h2>Confirmação de Presença</h2>
         <p>Por favor, preencha os campos abaixo para confirmar sua presença:</p>
-        <form id="rsvp-form">
+        <form id="confirmados-form">
             <label for="name">Seu Nome:</label>
-            <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
+            <input type="text" id="nome" name="name" placeholder="Digite seu nome" required>
 
             <label for="guests">Quantidade de Pessoas:</label>
-            <input type="number" id="guests" name="guests" placeholder="Número de acompanhantes" required>
+            <input type="number" id="acompanhantes" name="guests" placeholder="Número de acompanhantes" required>
 
             <label for="message">Mensagem (opcional):</label>
-            <textarea id="message" name="message" rows="4" placeholder="Deixe uma mensagem..."></textarea>
+            <textarea id="message" name="mensagem" rows="4" placeholder="Deixe uma mensagem..."></textarea>
 
             <button type="submit">Confirmar Presença</button>
         </form>
@@ -128,12 +128,12 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        document.getElementById('rsvp-form').addEventListener('submit', async function (e) {
+        document.getElementById('confirmados-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const name = document.getElementById('name').value.trim();
-            const guests = document.getElementById('guests').value;
-            const message = document.getElementById('message').value.trim();
+            const name = document.getElementById('nome').value.trim();
+            const guests = document.getElementById('acompanhantes').value;
+            const message = document.getElementById('mensagem').value.trim();
 
             if (name === '' || guests <= 0) {
                 alert('Preencha os campos corretamente.');
@@ -141,9 +141,9 @@
             }
 
             try {
-                await addDoc(collection(db, "rsvp"), { name, guests, message });
+                await addDoc(collection(db, "confirmados"), { nome, acompanhantes, mensagens });
                 alert('Presença confirmada no Firebase!');
-                document.getElementById('rsvp-form').reset();
+                document.getElementById('confirmados-form').reset();
             } catch (error) {
                 alert('Erro ao enviar dados: ' + error.message);
             }
