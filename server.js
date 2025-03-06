@@ -1,55 +1,41 @@
 const express = require('express');
-const fs = require('fs');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Adicione esta linha
-const XLSX = require('xlsx');
+const cors = require('cors');
+const admin = require('firebase-admin');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({
-    origin: '*', // Permite requisições de qualquer origem
-    methods: ['GET', 'POST'], // Permite apenas GET e POST
-    allowedHeaders: ['Content-Type'] // Permite cabeçalhos específicos
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
 }));
-
-// Servir arquivos estáticos da pasta "public"
-app.use(express.static('public'));
 
 const PORT = process.env.PORT || 3000;
 
+// Inicializar o Firebase Admin SDK
+const serviceAccount = require('./caminho/para/credenciais-firebase.json'); // Baixe as credenciais no Firebase Console
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+const db = admin.firestore();
+
 // Rota base
 app.get('/', (req, res) => {
-    res.send('Bem-vindo ao backend do RSVP!');
+    res.send('Bem-vindo ao backend do RSVP com Firebase!');
 });
 
-const filePath = 'rsvp_data.xlsx';
-
-app.post('/save', (req, res) => {
-    const data = req.body;
-
-    let workbook;
-    let worksheet;
-    
-    // Verificar se o arquivo já existe
-    if (fs.existsSync(filePath)) {
-        workbook = XLSX.readFile(filePath);
-        worksheet = workbook.Sheets['RSVP'];
-    } else {
-        workbook = XLSX.utils.book_new();
-        worksheet = XLSX.utils.json_to_sheet([]);
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'RSVP');
+// Rota para salvar dados no Firestore
+app.post('/save', async (req, res) => {
+    try {
+        const data = req.body;
+        const docRef = db.collection('rsvp').doc(); // 'rsvp' é a coleção
+        await docRef.set(data);
+        res.send('Presença confirmada com sucesso no Firebase!');
+    } catch (error) {
+        console.error('Erro ao salvar no Firebase:', error);
+        res.status(500).send('Erro ao salvar dados.');
     }
-
-    // Obter dados existentes e adicionar o novo
-    const existingData = XLSX.utils.sheet_to_json(worksheet);
-    existingData.push(data);
-    const updatedWorksheet = XLSX.utils.json_to_sheet(existingData);
-
-    workbook.Sheets['RSVP'] = updatedWorksheet;
-
-    // Salvar no arquivo Excel
-    XLSX.writeFile(workbook, filePath);
-    res.send('Presença confirmada com sucesso!');
 });
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
