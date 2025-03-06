@@ -11,10 +11,10 @@
             color: #333;
             margin: 0;
             padding: 0;
-            background-image: url('https://img.elo7.com.br/product/zoom/46F85CB/painel-pequeno-principe-g-frete-gratis-fundo-festa-infantil.jpg'); /* Caminho correto */
+            background-image: url('https://img.elo7.com.br/product/zoom/46F85CB/painel-pequeno-principe-g-frete-gratis-fundo-festa-infantil.jpg');
             background-size: cover;
             background-repeat: no-repeat;
-            background-position: center; /* Alinha a imagem ao centro */
+            background-position: center;
         }
         header {
             background-color: #4a90e2;
@@ -108,29 +108,46 @@
         Venha comemorar meu primeiro aninho! ⭐
     </footer>
 
-    <script>
-    document.getElementById('rsvp-form').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const data = {
-            name: document.getElementById('name').value,
-            guests: document.getElementById('guests').value,
-            message: document.getElementById('message').value,
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+
+        // 🔥 Configuração do Firebase (substitua pelos seus dados)
+        const firebaseConfig = {
+            apiKey: "AIzaSyATbfmmNZhhKwFNwww72AyBN39bkMg8rB8",
+            authDomain: "aniversario-2c745.firebaseapp.com",
+            projectId: "aniversario-2c745",
+            storageBucket: "aniversario-2c745.firebasestorage.app",
+            messagingSenderId: "902481257476",
+            appId: "1:902481257476:web:c3003195170430e196c151",
+            measurementId: "G-X9HFVLN8C3"
         };
 
-        await fetch('https://presenca-bbho.onrender.com/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-        .then(response => response.text())
-        .then(message => {
-            alert(message);
-            document.getElementById('rsvp-form').reset();
-        })
-        .catch(err => alert('Erro ao enviar dados: ' + err));
-    });
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('rsvp-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const guests = document.getElementById('guests').value;
+            const message = document.getElementById('message').value.trim();
+
+            if (name === '' || guests <= 0) {
+                alert('Preencha os campos corretamente.');
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "rsvp"), { name, guests, message });
+                alert('Presença confirmada no Firebase!');
+                document.getElementById('rsvp-form').reset();
+            } catch (error) {
+                alert('Erro ao enviar dados: ' + error.message);
+            }
+        });
     </script>
 </body>
 </html>
