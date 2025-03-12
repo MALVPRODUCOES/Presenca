@@ -10,7 +10,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Recuperar os dados do Firebase
-docs = db.collection('convidados').stream()
+docs = db.collection('rsvp').stream()
 
 # Converter os dados para um DataFrame do pandas
 data = [doc.to_dict() for doc in docs]
