@@ -3,7 +3,7 @@ from firebase_admin import credentials, firestore
 import pandas as pd
 
 # Inicializar o aplicativo Firebase
-cred = credentials.Certificate('caminho/para/seu/arquivo-json-de-conta-de-servico.json')
+cred = credentials.Certificate('Presenca/aniversario-2c745-firebase-adminsdk-fbsvc-919aa87dd4.json')
 firebase_admin.initialize_app(cred)
 
 # Conectar ao Firestore
