@@ -1,6 +1,7 @@
 // firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import Papa from 'papaparse';
 
 const firebaseConfig = {
   apiKey: "AIzaSyATbfmmNZhhKwFNwww72AyBN39bkMg8rB8",
@@ -13,4 +14,31 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const db = getFirestore(app);
+
+async function exportToCSV(collectionName: string) {
+  try {
+    const collectionRef = collection(db, collectionName);
+    const querySnapshot = await getDocs(collectionRef);
+    const data = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+
+    const csv = Papa.unparse(data, {
+      header: true, // Inclui o cabeçalho com os nomes dos campos
+    });
+
+    // Crie um link para download do CSV
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${collectionName}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error("Erro ao exportar para CSV:", error);
+  }
+}
+
+//Exemplo de uso:
+exportToCSV("rsvp"); // Substitua "suaColecao" pelo nome da sua coleção
