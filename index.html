@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aniversário do Apollo</title>
+    <title>Veronica 15 Anos</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -11,7 +11,7 @@
             color: #333;
             margin: 0;
             padding: 0;
-            background-image: url('https://img.elo7.com.br/product/zoom/46F85CB/painel-pequeno-principe-g-frete-gratis-fundo-festa-infantil.jpg');
+            background-image: url('https://i.pinimg.com/736x/59/2a/3d/592a3d6352359086551c6be1e0007898.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
@@ -105,7 +105,7 @@
         </form>
     </div>
     <footer>
-        Venha comemorar meu primeiro aninho! ⭐
+        Venha comemorar essa data mais que especial! ⭐
     </footer>
 
     <!-- Firebase -->
@@ -142,7 +142,7 @@
 
             try {
                 await addDoc(collection(db, "rsvp"), { name, guests, message });
-                alert('Presença confirmada no Firebase!');
+                alert('Presença confirmada!');
                 document.getElementById('rsvp-form').reset();
             } catch (error) {
                 alert('Erro ao enviar dados: ' + error.message);
